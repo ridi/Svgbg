@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const junk = require('junk');
 const each = require('async/each');
-const map = require('async/map');
 const CustomSVGO = require('./plugins/customSvgo');
 const TemplateBuilder = require('./plugins/templateBuilder');
 
@@ -21,11 +20,14 @@ class SvgGenerator {
     const svgo = new CustomSVGO(options);
 
     each(this.svgList, (filename) => {
-      const srcSvg = fs.readFileSync(path.join(src, filename));
-      svgo.customOptimize(srcSvg, (result) => {
-        fs.writeFileSync(path.resolve(dest, filename), result.fullSvgStr);
-        this.minifiedSvgList.push(result);
-      });
+      if (path.extname(filename) === 'svg') {
+        const srcSvg = fs.readFileSync(path.join(src, filename));
+        const destPath = path.resolve(dest, filename);
+        svgo.customOptimize(srcSvg, (result) => {
+          fs.writeFileSync(destPath, result.fullSvgStr);
+          this.minifiedSvgList.push(result);
+        });
+      }
     });
   }
 
