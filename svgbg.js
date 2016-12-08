@@ -6,33 +6,6 @@ const map = require('async/map');
 const SVGO = require('./plugins/customSvgo');
 const TemplateBuilder = require('./plugins/templateBuilder');
 
-const config = {
-  src: path.resolve(__dirname, './test/src'),
-  minify: {
-    dest: path.resolve(__dirname, './test/dist'),
-    options: {
-      plugins: [
-        { removeTitle: true },
-        { removeDimensions: true },
-        { removeStyleElement: true },
-        { removeAttrs: { attrs: 'path:(fill|id|clip-path|fill-rule|clip-rule)' }}
-      ],
-    }
-  },
-  background: {
-    name: 'sample',
-    type: 'less',
-    dest: [ path.resolve(__dirname, './test/dist') ],
-    template: path.resolve(__dirname, './test/templates/sample.less.hbs'),
-  },
-  demo: {
-    name: 'sample',
-    type: 'html',
-    dest: [ path.resolve(__dirname, './test/dist') ],
-    template: path.resolve(__dirname, './test/templates/sample.html.hbs'),
-  },
-};
-
 class SvgGenerator {
   constructor (config) {
     this.config = config;
@@ -54,8 +27,8 @@ class SvgGenerator {
         fs.writeFileSync(path.resolve(dest, filename), minifiedSvgStr);
         const svgJs = minifiedSvgJs.content[0];
 
-        function sortPaths (list) {
-          return list.map((element) => {
+        function sortPaths (pathList) {
+          return pathList.map((element) => {
             if (element.elem === 'g') {
               return sortPaths(element.content);
             } else if (element.elem === 'path') {
@@ -94,16 +67,6 @@ class SvgGenerator {
 
   buildTemplate () {
     const templateBuilder = new TemplateBuilder(this.minifiedSvgList);
-    // templateBuilder.build([
-    //   {
-    //     srcPath: path.resolve(__dirname, './test/templates/sample.less.hbs'),
-    //     destPathList: [ path.resolve(__dirname, './test/dist') ]
-    //   },
-    //   {
-    //     srcPath: path.resolve(__dirname, './test/templates/sample.html.hbs'),
-    //     destPathList: [ path.resolve(__dirname, './test/dist') ]
-    //   },
-    // ]);
     templateBuilder.build([
       this.config.background,
       this.config.inline,
@@ -114,11 +77,8 @@ class SvgGenerator {
   build () {
     this.minify();
     this.logMinSvgList();
-    this.build();
+    this.buildTemplate();
   }
 }
-
-const svgGen = SvgGenerator(config);
-svgGen.build();
 
 module.exports = SvgGenerator;
