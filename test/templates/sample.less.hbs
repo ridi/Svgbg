@@ -1,0 +1,18 @@
+.import_svg(@width, @height, @color, @path) {
+  display: inline-block; text-indent: -444px; font-size: 0; overflow: hidden;
+  @svg: escape('<svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 @{width} @{height}">
+  <style>path, polygon { fill:"@{color}"; }</style>@{path}</svg>');
+  background: url('data:image/svg+xml,@{svg}') center center no-repeat;
+  background-size: 100% 100%;
+}
+{{#each iconList as |icon|}}
+
+.svg_{{icon.name}}(@color) {
+  @path: ~'{{#each icon.pathList as |path|}}<path fill="@{color}" d="{{path}}"/>{{/each}}';
+  .import_svg({{icon.viewBox.width}}, {{icon.viewBox.height}}, @color, @path);
+}
+
+.svg-{{icon.name}} {
+  .svg_{{icon.name}}(black);
+}
+{{/each}}

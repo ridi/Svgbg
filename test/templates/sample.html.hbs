@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RIDI Iconfont</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../../node_modules/ridibooks-rui/css/page.css"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="../../node_modules/ridibooks-rui/css/navigation.css"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="sample.css"/>
+    <style>
+        .svg_icon {
+            width: 500px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="header_wrapper">
+    <h1 class="header_title"><a href="//ridibooks.com">RIDI Web</a></h1>
+</div>
+<section id="page_ruicon">
+    <h1>RIDIBOOKS 서점 SVG Icon</h1>
+    <p class="icon_name">CSS Background</p>
+    <ul id="icons">
+    {{#each iconList as |icon|}}
+        <li>
+        <a href="svg/{{icon.name}}.svg" class="icon_link" target="_blank" download>
+            <span class="svg_icon svg-{{icon.name}}"></span>
+        </a>
+        <span class="icon_title">svg_{{icon.name}}</span>
+        </li>
+    {{/each}}
+    </ul>
+</section>
+</body>
+</html>
