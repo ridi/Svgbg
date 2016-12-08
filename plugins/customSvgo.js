@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * This is a modified version of SVGO by Gyujin Cho.
+ * This is a customized version of SVGO.
  */
  
 /**
@@ -20,14 +20,49 @@ const PLUGINS = require('svgo/lib/svgo/plugins');
 const JSAPI = require('svgo/lib/svgo/jsAPI');
 const JS2SVG = require('svgo/lib/svgo/js2svg');
 
-class SVGO {
+class CustomSVGO {
   constructor (config) {
     this.config = CONFIG(config);
-    this.optimize = this.optimize.bind(this);
+    this._sortPaths = this._sortPaths.bind(this);
+    this._optimize = this._optimize.bind(this);
     this._optimizeOnce = this._optimizeOnce.bind(this);
   }
 
-  optimize (svgstr, callback) {
+  customOptimize (srcSvg) {
+    this._optimize(srcSvg, (minifiedSvgJs, minifiedSvgStr) => {
+      const svgJs = minifiedSvgJs.content[0];
+      return {
+        name: filename.substr(0, filename.lastIndexOf('.')),
+        viewBox: {
+          width: svgJs.attrs.viewBox.value.split(' ')[2],
+          height: svgJs.attrs.viewBox.value.split(' ')[3],
+        },
+        pathList: this._sortPaths(svgJs.content)
+          .concat()
+          .filter((element)=>{
+            if (element !== undefined) {
+              return element;
+            }
+        }),
+        fullSvgStr: minifiedSvgStr,
+      };
+    });
+  }
+
+  _sortPaths (pathList) {
+    return pathList.map((element) => {
+      if (element.elem === 'g') {
+        return this._sortPaths(element.content);
+      } else if (element.elem === 'path') {
+        return element.attrs.d.value;
+      } else {
+        //TODO: test용 console.log 제거
+        console.log(element);
+      }
+    });
+  }
+
+  _optimize (svgstr, callback) {
     if (this.config.error) {
       return callback(this.config);
     }
@@ -38,23 +73,19 @@ class SVGO {
     let prevResultSize = Number.POSITIVE_INFINITY;
 
     function optimizeOnceCallback (svgjs, svg) {
-
       if (svgjs.error) {
         callback(svgjs, svg);
         return;
       }
-
       if (++counter < maxPassCount && svgjs.data.length < prevResultSize) {
         prevResultSize = svgjs.data.length;
         this._optimizeOnce(svgjs.data, optimizeOnceCallback);
       } else {
         callback(svgjs, svg);
       }
-
     }
 
     this._optimizeOnce(svgstr, optimizeOnceCallback);
-
   }
 
   _optimizeOnce (svgstr, callback) {
@@ -86,7 +117,7 @@ class SVGO {
   };
 }
 
-module.exports = SVGO;
+module.exports = CustomSVGO;
 
 
 
