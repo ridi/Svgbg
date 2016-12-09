@@ -28,10 +28,10 @@ class CustomSVGO {
     this._optimizeOnce = this._optimizeOnce.bind(this);
   }
 
-  customOptimize (srcSvg) {
+  customOptimize (srcSvg, filename, callback) {
     this._optimize(srcSvg, (minifiedSvgJs, minifiedSvgStr) => {
       const svgJs = minifiedSvgJs.content[0];
-      return {
+      callback({
         name: filename.substr(0, filename.lastIndexOf('.')),
         viewBox: {
           width: svgJs.attrs.viewBox.value.split(' ')[2],
@@ -45,7 +45,7 @@ class CustomSVGO {
             }
         }),
         fullSvgStr: minifiedSvgStr,
-      };
+      });
     });
   }
 

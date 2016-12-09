@@ -21,12 +21,12 @@
     <h1>RIDIBOOKS 서점 SVG Icon</h1>
     <p class="icon_name">CSS Background</p>
     <ul id="icons">
-    {{#each iconList as |icon|}}
+    {{#each svgList as |svg|}}
         <li>
-        <a href="svg/{{icon.name}}.svg" class="icon_link" target="_blank" download>
-            <span class="svg_icon svg-{{icon.name}}"></span>
+        <a href="svg/{{svg.name}}.svg" class="icon_link" target="_blank" download>
+            <span class="svg_icon svg-{{svg.name}}"></span>
         </a>
-        <span class="icon_title">svg_{{icon.name}}</span>
+        <span class="icon_title">svg_{{svg.name}}</span>
         </li>
     {{/each}}
     </ul>

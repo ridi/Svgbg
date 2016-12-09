@@ -19,6 +19,9 @@ const config = {
     type: 'less',
     dest: [ path.resolve(__dirname, './dist') ],
     template: path.resolve(__dirname, './templates/sample.less.hbs'),
+    etc: {
+      a: 'b',
+    }
   },
   demo: {
     name: 'sample',

@@ -5,14 +5,14 @@
   background: url('data:image/svg+xml,@{svg}') center center no-repeat;
   background-size: 100% 100%;
 }
-{{#each iconList as |icon|}}
+{{#each svgList as |svg|}}
 
-.svg_{{icon.name}}(@color) {
-  @path: ~'{{#each icon.pathList as |path|}}<path fill="@{color}" d="{{path}}"/>{{/each}}';
-  .import_svg({{icon.viewBox.width}}, {{icon.viewBox.height}}, @color, @path);
+.svg_{{svg.name}}(@color) {
+  @path: ~'{{#each svg.pathList as |path|}}<path fill="@{color}" d="{{path}}"/>{{/each}}';
+  .import_svg({{svg.viewBox.width}}, {{svg.viewBox.height}}, @color, @path);
 }
 
-.svg-{{icon.name}} {
-  .svg_{{icon.name}}(black);
+.svg-{{svg.name}} {
+  .svg_{{svg.name}}(black);
 }
 {{/each}}
