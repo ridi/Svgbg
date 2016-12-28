@@ -3,7 +3,7 @@
 /**
  * This is a customized version of SVGO.
  */
- 
+
 /**
  * SVGO is a Nodejs-based tool for optimizing SVG vector graphics files.
  *
@@ -19,11 +19,13 @@ const SVG2JS = require('svgo/lib/svgo/svg2js');
 const PLUGINS = require('svgo/lib/svgo/plugins');
 const JSAPI = require('svgo/lib/svgo/jsAPI');
 const JS2SVG = require('svgo/lib/svgo/js2svg');
+const each = require('async/each');
 
 class CustomSVGO {
   constructor (config) {
     this.config = CONFIG(config);
-    this._sortPaths = this._sortPaths.bind(this);
+    this._sortElements = this._sortElements.bind(this);
+    this._sortElementsIterator = this._sortElementsIterator.bind(this);
     this._optimize = this._optimize.bind(this);
     this._optimizeOnce = this._optimizeOnce.bind(this);
   }
@@ -37,24 +39,42 @@ class CustomSVGO {
           width: svgJs.attrs.viewBox.value.split(' ')[2],
           height: svgJs.attrs.viewBox.value.split(' ')[3],
         },
-        pathList: this._sortPaths(svgJs.content)
+        pathList: this._sortElements(svgJs.content).pathList
           .concat()
           .filter((element)=>{
             if (element !== undefined) {
               return element;
             }
         }),
+        shapeList: this._sortElements(svgJs.content).shapeList
+          .concat()
+          .filter((element)=>{
+            if (element !== undefined) {
+              return element;
+            }
+          }),
         fullSvgStr: minifiedSvgStr,
       });
     });
   }
 
-  _sortPaths (pathList) {
-    return pathList.map((element) => {
+  _sortElements (elementList) {
+    const sortedElementList = {
+      pathList: [],
+      shapeList: [],
+    };
+    this._sortElementsIterator(elementList, sortedElementList);
+    return sortedElementList;
+  }
+
+  _sortElementsIterator (elementList, sortedElementList) {
+    each(elementList, (element) => {
       if (element.elem === 'g') {
-        return this._sortPaths(element.content);
+        this._sortElementsIterator(element.content, sortedElementList);
       } else if (element.elem === 'path') {
-        return element.attrs.d.value;
+        sortedElementList.pathList.push(element.attrs.d.value);
+      } else if (element.elem === 'circle' || element.elem === 'ellipse') {
+        sortedElementList.shapeList.push(element);
       } else {
         //TODO: test용 console.log 제거
         console.log(element);

@@ -3,6 +3,10 @@ const path = require('path');
 const Handlebars = require('handlebars');
 const each = require('async/each');
 
+Handlebars.registerHelper("reduce", function(number) {
+  return (number / 3 * 2);
+});
+
 class TemplateBuilder {
   constructor (svgList) {
     this.svgList = svgList;
@@ -17,20 +21,18 @@ class TemplateBuilder {
   }
 
   build (templateItem) {
-    console.log('building template');
-    console.log(templateItem);
     if (!templateItem) {
       return;
     }
     const srcPath = templateItem.template;
     const destPathList = templateItem.dest;
-    const filename = TemplateBuilder._makeFileName(templateItem, srcPath);
+    const filename = TemplateBuilder.makeFileName(templateItem, srcPath);
     const extraData = templateItem.etc;
 
     const compiledResult = this.compileTemplate(srcPath, extraData);
 
     each(destPathList, (destPath) => {
-      TemplateBuilder._writeCompileResultToFile(destPath, filename, compiledResult);
+      TemplateBuilder.writeCompileResultToFile(destPath, filename, compiledResult);
     });
   }
 
@@ -41,11 +43,11 @@ class TemplateBuilder {
     return compile(compileData);
   }
 
-  static _writeCompileResultToFile (destPath, filename, compiledResult) {
+  static writeCompileResultToFile (destPath, filename, compiledResult) {
     fs.writeFileSync(path.join(destPath, filename), compiledResult, {flags: 'w+'});
   }
 
-  static _makeFileName (templateItem, srcPath) {
+  static makeFileName (templateItem, srcPath) {
     const basename = templateItem.name || path.basename(srcPath, path.extname(srcPath));
     const extname = templateItem.type;
     return path.format({

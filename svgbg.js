@@ -14,12 +14,9 @@ class SvgGenerator {
     this.minify = this.minify.bind(this);
     this.logMinSvgList = this.logMinSvgList.bind(this);
     this.buildTemplate = this.buildTemplate.bind(this);
-    console.log('constructed');
   }
 
   minify () {
-    console.log('inside miniy');
-
     const { src } = this.config;
     const { dest, options } = this.config.minify;
     const svgo = new CustomSVGO(options);
@@ -40,22 +37,14 @@ class SvgGenerator {
   }
 
   logMinSvgList () {
-    console.log('logging');
     each(this.minifiedSvgList, (svg) => {
       console.log(svg);
     });
   }
 
   buildTemplate () {
-    console.log('building');
-    console.log(this.minifiedSvgList);
-    const { background, inline, demo } = this.config;
     const templateBuilder = new TemplateBuilder(this.minifiedSvgList);
-    templateBuilder.buildAll([
-      background,
-      inline,
-      demo,
-    ]);
+    templateBuilder.buildAll(this.config.templates);
   }
 
   build () {
