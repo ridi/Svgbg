@@ -8,6 +8,7 @@ const TemplateBuilder = require('./plugins/templateBuilder');
 class SvgGenerator {
   constructor (config) {
     this.config = config;
+    this.svgo = new CustomSVGO(config.minify.options);
     this.svgList = fs.readdirSync(this.config.src).filter(junk.not);
     this.minifiedSvgList = [];
     this.build = this.build.bind(this);
@@ -17,10 +18,17 @@ class SvgGenerator {
     this.buildTemplate = this.buildTemplate.bind(this);
   }
 
-  minify (svgo, filename, callback) {
+  static checkDirectory (path) {
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path);
+    }
+  }
+
+  minify (filename, callback) {
+    SvgGenerator.checkDirectory(this.config.minify.dest);
     if (path.extname(filename) === '.svg') {
       const srcSvg = fs.readFileSync(path.join(this.config.src, filename));
-      svgo.customOptimize(srcSvg, filename, callback);
+      this.svgo.customOptimize(srcSvg, filename, callback);
     }
   }
 
@@ -32,22 +40,22 @@ class SvgGenerator {
 
   logMinifiedSvgList () {
     each(this.minifiedSvgList, (svg) => {
-      console.log(svg);
+      console.log("saved "+ svg.name);
     });
   }
 
-  buildTemplate () {
+  buildTemplate (callback) {
     const templateBuilder = new TemplateBuilder(this.minifiedSvgList);
     templateBuilder.buildAll(this.config.templates);
+    callback();
   }
 
-  build () {
-    const svgo = new CustomSVGO(this.config.minify.options);
+  build (callback) {
     each(this.svgList, (filename) => {
-      this.minify(svgo, filename, this.minifyCallback);
+      this.minify(filename, this.minifyCallback);
     });
     this.logMinifiedSvgList();
-    this.buildTemplate();
+    this.buildTemplate(callback);
   }
 }
 

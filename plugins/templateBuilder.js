@@ -32,6 +32,7 @@ class TemplateBuilder {
     const compiledResult = this.compileTemplate(srcPath, extraData);
 
     each(destPathList, (destPath) => {
+      TemplateBuilder.checkDirectory(destPath);
       TemplateBuilder.writeCompileResultToFile(destPath, filename, compiledResult);
     });
   }
@@ -41,6 +42,12 @@ class TemplateBuilder {
     const compile = Handlebars.compile(template);
     const compileData = Object.assign({ svgList: this.svgList }, extraData);
     return compile(compileData);
+  }
+
+  static checkDirectory (path) {
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path);
+    }
   }
 
   static writeCompileResultToFile (destPath, filename, compiledResult) {
