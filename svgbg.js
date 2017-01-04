@@ -16,26 +16,6 @@ class SvgGenerator {
     this.logMinifiedSvgList = this.logMinifiedSvgList.bind(this);
     this.buildTemplate = this.buildTemplate.bind(this);
   }
-  //
-  // minify2 () {
-  //   const { src } = this.config;
-  //   const { dest, options } = this.config.minify;
-  //   const svgo = new CustomSVGO(options);
-  //
-  //   each(this.svgList, (filename) => {
-  //     if (path.extname(filename) === '.svg') {
-  //       const srcSvg = fs.readFileSync(path.join(src, filename));
-  //       const destPath = path.resolve(dest, filename);
-  //       svgo.customOptimize(srcSvg, filename, (result) => {
-  //         fs.writeFileSync(destPath, result.fullSvgStr);
-  //         this.minifiedSvgList.push(result);
-  //       });
-  //     }
-  //   });
-  //
-  //   this.logMinSvgList();
-  //   this.buildTemplate();
-  // }
 
   minify (svgo, filename, callback) {
     if (path.extname(filename) === '.svg') {
