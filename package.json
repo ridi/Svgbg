@@ -2,6 +2,7 @@
   "name": "svgbg",
   "version": "0.1.0",
   "description": "turn your svg files to css backgrounds",
+  "author": "Gyujin Cho",
   "main": "svgbg.js",
   "dependencies": {
     "async": "^2.1.4",
