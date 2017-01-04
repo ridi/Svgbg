@@ -12,31 +12,45 @@ class SvgGenerator {
     this.minifiedSvgList = [];
     this.build = this.build.bind(this);
     this.minify = this.minify.bind(this);
-    this.logMinSvgList = this.logMinSvgList.bind(this);
+    this.minifyCallback = this.minifyCallback.bind(this);
+    this.logMinifiedSvgList = this.logMinifiedSvgList.bind(this);
     this.buildTemplate = this.buildTemplate.bind(this);
   }
+  //
+  // minify2 () {
+  //   const { src } = this.config;
+  //   const { dest, options } = this.config.minify;
+  //   const svgo = new CustomSVGO(options);
+  //
+  //   each(this.svgList, (filename) => {
+  //     if (path.extname(filename) === '.svg') {
+  //       const srcSvg = fs.readFileSync(path.join(src, filename));
+  //       const destPath = path.resolve(dest, filename);
+  //       svgo.customOptimize(srcSvg, filename, (result) => {
+  //         fs.writeFileSync(destPath, result.fullSvgStr);
+  //         this.minifiedSvgList.push(result);
+  //       });
+  //     }
+  //   });
+  //
+  //   this.logMinSvgList();
+  //   this.buildTemplate();
+  // }
 
-  minify () {
-    const { src } = this.config;
-    const { dest, options } = this.config.minify;
-    const svgo = new CustomSVGO(options);
-
-    each(this.svgList, (filename) => {
-      if (path.extname(filename) === '.svg') {
-        const srcSvg = fs.readFileSync(path.join(src, filename));
-        const destPath = path.resolve(dest, filename);
-        svgo.customOptimize(srcSvg, filename, (result) => {
-          fs.writeFileSync(destPath, result.fullSvgStr);
-          this.minifiedSvgList.push(result);
-        });
-      }
-    });
-
-    this.logMinSvgList();
-    this.buildTemplate();
+  minify (svgo, filename, callback) {
+    if (path.extname(filename) === '.svg') {
+      const srcSvg = fs.readFileSync(path.join(this.config.src, filename));
+      svgo.customOptimize(srcSvg, filename, callback);
+    }
   }
 
-  logMinSvgList () {
+  minifyCallback (filename, minifiedSvg) {
+    const destPath = path.resolve(this.config.minify.dest, filename);
+    fs.writeFileSync(destPath, minifiedSvg.fullSvgStr);
+    this.minifiedSvgList.push(minifiedSvg);
+  }
+
+  logMinifiedSvgList () {
     each(this.minifiedSvgList, (svg) => {
       console.log(svg);
     });
@@ -48,7 +62,12 @@ class SvgGenerator {
   }
 
   build () {
-    this.minify();
+    const svgo = new CustomSVGO(this.config.minify.options);
+    each(this.svgList, (filename) => {
+      this.minify(svgo, filename, this.minifyCallback);
+    });
+    this.logMinifiedSvgList();
+    this.buildTemplate();
   }
 }
 

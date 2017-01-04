@@ -5,15 +5,15 @@ const config = {
   src: path.resolve(__dirname, './src'),
   minify: {
     dest: path.resolve(__dirname, './dist'),
-    options: {
-      plugins: [
-        { removeTitle: true },
-        { removeDimensions: true },
-        { removeStyleElement: true },
-        { removeAttrs: { attrs: 'path:(fill|id|clip-path|fill-rule|clip-rule)' }},
-        { transformsWithOnePath: true }
-      ],
-    }
+    // options: {
+    //   plugins: [
+    //     { removeTitle: true },
+    //     { removeDimensions: true },
+    //     { removeStyleElement: true },
+    //     { removeAttrs: { attrs: 'path:(fill|id|clip-path|fill-rule|clip-rule)' }},
+    //     { transformsWithOnePath: true }
+    //   ],
+    // }
   },
   templates: [
     {
@@ -42,13 +42,3 @@ const config = {
 
 const svgGen = new SvgGenerator(config);
 svgGen.build();
-
-// var assert = require('assert');
-//
-// describe('Array', function(){
-//     describe('#indexOf()', function(){
-//         it('should return -1 when the value is not present', function(){
-//             assert.equal(-1, [1,2,3].indexOf(2));
-//         });
-//     });
-// });

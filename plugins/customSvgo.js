@@ -19,11 +19,12 @@ const SVG2JS = require('svgo/lib/svgo/svg2js');
 const PLUGINS = require('svgo/lib/svgo/plugins');
 const JSAPI = require('svgo/lib/svgo/jsAPI');
 const JS2SVG = require('svgo/lib/svgo/js2svg');
+const defaultConfig = require('../defaultConfig.json');
 const each = require('async/each');
 
 class CustomSVGO {
   constructor (config) {
-    this.config = CONFIG(config);
+    this.config = CONFIG(Object.assign(defaultConfig, config));
     this._sortElements = this._sortElements.bind(this);
     this._sortElementsIterator = this._sortElementsIterator.bind(this);
     this._optimize = this._optimize.bind(this);
@@ -33,7 +34,7 @@ class CustomSVGO {
   customOptimize (srcSvg, filename, callback) {
     this._optimize(srcSvg, (minifiedSvgJs, minifiedSvgStr) => {
       const svgJs = minifiedSvgJs.content[0];
-      callback({
+      callback(filename, {
         name: filename.substr(0, filename.lastIndexOf('.')),
         viewBox: {
           width: svgJs.attrs.viewBox.value.split(' ')[2],

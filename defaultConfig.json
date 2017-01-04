@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    { "removeTitle": true },
+    { "removeDimensions": true },
+    { "removeStyleElement": true },
+    { "removeAttrs": {
+        "attrs": "path:(fill|id|clip-path|fill-rule|clip-rule)"
+      }
+    },
+    { "transformsWithOnePath": true }
+  ]
+}
