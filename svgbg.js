@@ -4,10 +4,11 @@ const junk = require('junk');
 const each = require('async/each');
 const CustomSVGO = require('./plugins/customSvgo');
 const TemplateBuilder = require('./plugins/templateBuilder');
+const Config = require('./plugins/config');
 
 class SvgGenerator {
   constructor (config) {
-    this.config = config;
+    this.config = Config(config);
     this.svgo = new CustomSVGO(config.minify.options);
     this.svgList = fs.readdirSync(this.config.src).filter(junk.not);
     this.minifiedSvgList = [];
@@ -47,7 +48,9 @@ class SvgGenerator {
   buildTemplate (callback) {
     const templateBuilder = new TemplateBuilder(this.minifiedSvgList);
     templateBuilder.buildAll(this.config.templates);
-    callback();
+    if (callback) {
+      callback();
+    }
   }
 
   build (callback) {

@@ -2,25 +2,16 @@ const path = require('path');
 const SvgGenerator = require('../svgbg');
 
 const config = {
-  src: path.resolve(__dirname, './src'),
+  src: './src',
   minify: {
-    dest: path.resolve(__dirname, './dist'),
-    // options: {
-    //   plugins: [
-    //     { removeTitle: true },
-    //     { removeDimensions: true },
-    //     { removeStyleElement: true },
-    //     { removeAttrs: { attrs: 'path:(fill|id|clip-path|fill-rule|clip-rule)' }},
-    //     { transformsWithOnePath: true }
-    //   ],
-    // }
+    dest: './dist'
   },
   templates: [
     {
       name: 'svg_icon_full',
       type: 'less',
-      dest: [ path.resolve(__dirname, './dist') ],
-      template: path.resolve(__dirname, './templates/sample.less.hbs'),
+      dest: [ './dist' ],
+      template: './templates/sample.less.hbs',
       etc: {
         a: 'b',
       }
@@ -28,14 +19,14 @@ const config = {
     {
       name: 'page_svg_icon',
       type: 'less',
-      dest: [ path.resolve(__dirname, './dist') ],
-      template: path.resolve(__dirname, './templates/sample_page.less.hbs')
+      dest: [ './dist' ],
+      template: './templates/sample_page.less.hbs'
     },
     {
       name: 'svg-icon',
       type: 'html',
-      dest: [ path.resolve(__dirname, './dist') ],
-      template: path.resolve(__dirname, './templates/sample.html.hbs')
+      dest: [ './dist' ],
+      template: './templates/sample.html.hbs'
     }
   ]
 };
