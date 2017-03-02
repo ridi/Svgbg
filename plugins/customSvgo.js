@@ -1,7 +1,5 @@
-'use strict';
-
 /**
- * This is a customized version of SVGO.
+ * This is a customized version of SVGO for svgbg.
  */
 
 /**
@@ -17,13 +15,12 @@
 const CONFIG = require('svgo/lib/svgo/config');
 const SVG2JS = require('svgo/lib/svgo/svg2js');
 const PLUGINS = require('svgo/lib/svgo/plugins');
-const JSAPI = require('svgo/lib/svgo/jsAPI');
 const JS2SVG = require('svgo/lib/svgo/js2svg');
 const defaultConfig = require('../defaultConfig.json');
 const each = require('async/each');
 
 class CustomSVGO {
-  constructor (config) {
+  constructor(config) {
     this.config = CONFIG(Object.assign(defaultConfig, config));
     this._sortElements = this._sortElements.bind(this);
     this._sortElementsIterator = this._sortElementsIterator.bind(this);
@@ -31,7 +28,7 @@ class CustomSVGO {
     this._optimizeOnce = this._optimizeOnce.bind(this);
   }
 
-  customOptimize (srcSvg, filename, callback) {
+  customOptimize(srcSvg, filename, callback) {
     this._optimize(srcSvg, (minifiedSvgJs, minifiedSvgStr) => {
       const svgJs = minifiedSvgJs.content[0];
       callback(filename, {
@@ -42,24 +39,16 @@ class CustomSVGO {
         },
         pathList: this._sortElements(svgJs.content).pathList
           .concat()
-          .filter((element)=>{
-            if (element !== undefined) {
-              return element;
-            }
-        }),
+          .filter(element => element !== undefined),
         shapeList: this._sortElements(svgJs.content).shapeList
           .concat()
-          .filter((element)=>{
-            if (element !== undefined) {
-              return element;
-            }
-          }),
+          .filter(element => element !== undefined),
         fullSvgStr: minifiedSvgStr,
       });
     });
   }
 
-  _sortElements (elementList) {
+  _sortElements(elementList) {
     const sortedElementList = {
       pathList: [],
       shapeList: [],
@@ -68,7 +57,7 @@ class CustomSVGO {
     return sortedElementList;
   }
 
-  _sortElementsIterator (elementList, sortedElementList) {
+  _sortElementsIterator(elementList, sortedElementList) {
     each(elementList, (element) => {
       if (element.elem === 'g') {
         this._sortElementsIterator(element.content, sortedElementList);
@@ -76,16 +65,14 @@ class CustomSVGO {
         sortedElementList.pathList.push(element.attrs.d.value);
       } else if (element.elem === 'circle' || element.elem === 'ellipse') {
         sortedElementList.shapeList.push(element);
-      } else {
-        //TODO: test용 console.log 제거
-        console.log(element);
       }
     });
   }
 
-  _optimize (svgstr, callback) {
+  _optimize(svgstr, callback) {
     if (this.config.error) {
-      return callback(this.config);
+      callback(this.config);
+      return;
     }
 
     const config = this.config;
@@ -93,12 +80,13 @@ class CustomSVGO {
     let counter = 0;
     let prevResultSize = Number.POSITIVE_INFINITY;
 
-    function optimizeOnceCallback (svgjs, svg) {
+    function optimizeOnceCallback(svgjs, svg) {
       if (svgjs.error) {
         callback(svgjs, svg);
         return;
       }
-      if (++counter < maxPassCount && svgjs.data.length < prevResultSize) {
+      counter += 1;
+      if (counter < maxPassCount && svgjs.data.length < prevResultSize) {
         prevResultSize = svgjs.data.length;
         this._optimizeOnce(svgjs.data, optimizeOnceCallback);
       } else {
@@ -109,36 +97,19 @@ class CustomSVGO {
     this._optimizeOnce(svgstr, optimizeOnceCallback);
   }
 
-  _optimizeOnce (svgstr, callback) {
+  _optimizeOnce(svgstr, callback) {
     const config = this.config;
 
-    SVG2JS(svgstr, function(svgjs) {
-
+    SVG2JS(svgstr, (svgjs) => {
       if (svgjs.error) {
         callback(svgjs);
         return;
       }
-
-      svgjs = PLUGINS(svgjs, config.plugins);
-      svgstr = JS2SVG(svgjs, config.js2svg).data;
-
-      callback(svgjs, svgstr);
-
+      const minifiedSvgjs = PLUGINS(svgjs, config.plugins);
+      const minifiedSvgstr = JS2SVG(minifiedSvgjs, config.js2svg).data;
+      callback(minifiedSvgjs, minifiedSvgstr);
     });
   }
-
-  /**
-   * The factory that creates a content item with the helper methods.
-   *
-   * @param {Object} data which passed to jsAPI constructor
-   * @returns {JSAPI} content item
-   */
-  createContentItem (data) {
-    return new JSAPI(data);
-  };
 }
 
 module.exports = CustomSVGO;
-
-
-
