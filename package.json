@@ -2,7 +2,8 @@
   "name": "svgbg",
   "version": "0.1.0",
   "description": "turn your svg files to css backgrounds",
-  "author": "Gyujin Cho",
+  "keywords": ["svg", "background", "css", "template"],
+  "license": "MIT",
   "main": "svgbg.js",
   "dependencies": {
     "async": "^2.1.4",
@@ -18,5 +19,8 @@
   },
   "engines": {
     "node": ">=6.8.1"
+  },
+  "scripts": {
+    "lint": "eslint './**/*.js'"
   }
 }
