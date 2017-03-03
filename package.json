@@ -8,6 +8,8 @@
     "css",
     "template"
   ],
+  "author": "Ridibooks Store Team Frontend Part <frontend.part@ridi.com>",
+  "repository": "https://github.com/ridibooks/Svgbg",
   "license": "MIT",
   "main": "svgbg.js",
   "dependencies": {
