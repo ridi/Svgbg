@@ -2,39 +2,23 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>RIDI Iconfont</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="../rui/css/page.css"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="../rui/css/navigation.css"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="dist/css/page_svg_icon.css"/>
+  <title>Svgbg Sample Page</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="sample_page.css"/>
 </head>
 <body>
-<div class="header_wrapper">
-  <h1 class="header_title"><a href="//ridibooks.com">RIDI Web</a></h1>
-  <ul class="navigation_wrapper">
-    <li><span class="submenu_toggle_button">Icon ▾</span>
-      <ul class="submenu">
-        <li><a href="svg-icon.html">SVG Icon</a></li>
-        <li><a href="dist/icon/ridi-icon.html">Icon Font</a></li>
-      </ul>
-    </li>
-    <li><a href="color-chips.html">ColorChips ▸</a></li>
-    <li><a href="../svg_colorfilter_test">SVG ColorFilter ▸</a></li>
-    <li><a href="../rui" target="_blank">RUI ▸▸</a></li>
-  </ul>
-</div>
-<section id="page_ruicon">
-    <h1>RIDIBOOKS 서점 SVG Icon</h1>
-    <p class="icon_name">CSS Background</p>
+  <section id="sample_page">
+    <h1>SVG Background Sample Page </h1>
     <ul class="icon_list">
-    {{#each svgList as |svg|}}
-      <li class="icon_item">
-        <a href="dist/icon/svg_icon/{{svg.name}}.svg" class="icon_link" target="_blank" download>
-            <span class="svg_icon svg-{{svg.name}}"></span>
-        </a>
-        <span class="icon_title">svg_{{svg.name}}<br/>{{svg.viewBox.width}}X{{svg.viewBox.height}}</span>
-      </li>
-    {{/each}}
+      {{#each svgList as |svg|}}
+        <li class="icon_item">
+          <a href="dist/svg/{{svg.name}}.svg" class="icon_link" target="_blank" download>
+              <span class="svg_icon svg-{{svg.name}}"></span>
+          </a>
+          <p class="icon_title">{{svg.name}}<br/>{{svg.viewBox.width}}X{{svg.viewBox.height}}</p>
+        </li>
+      {{/each}}
     </ul>
-</section>
+  </section>
 </body>
 </html>
+\

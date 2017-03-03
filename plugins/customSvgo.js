@@ -2,16 +2,6 @@
  * This is a customized version of SVGO for svgbg.
  */
 
-/**
- * SVGO is a Nodejs-based tool for optimizing SVG vector graphics files.
- *
- * @see https://github.com/svg/svgo
- *
- * @author Kir Belevich <kir@soulshine.in> (https://github.com/deepsweet)
- * @copyright © 2012 Kir Belevich
- * @license MIT https://raw.githubusercontent.com/svg/svgo/master/LICENSE
- */
-
 const CONFIG = require('svgo/lib/svgo/config');
 const SVG2JS = require('svgo/lib/svgo/svg2js');
 const PLUGINS = require('svgo/lib/svgo/plugins');

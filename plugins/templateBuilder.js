@@ -31,7 +31,7 @@ class TemplateBuilder {
     const compiledResult = this.compileTemplate(srcPath, extraData);
 
     each(destPathList, (destPath) => {
-      mkdir(destPath);
+      mkdir.sync(destPath);
       fs.writeFileSync(path.join(destPath, filename), compiledResult, { flags: 'w+' });
     });
   }

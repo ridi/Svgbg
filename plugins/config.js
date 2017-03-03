@@ -7,6 +7,9 @@ module.exports = function config(options) {
   }
 
   function pathify(string) {
+    if (options.root !== undefined) {
+      return path.resolve(options.root, string);
+    }
     return path.resolve(string);
   }
 

@@ -7,10 +7,12 @@ const CustomSVGO = require('./plugins/customSvgo');
 const TemplateBuilder = require('./plugins/templateBuilder');
 const Config = require('./plugins/config');
 
-class SvgGenerator {
+class Svgbg {
   constructor(config) {
     this.config = Config(config);
     this.svgo = new CustomSVGO(config.minify.options);
+    console.log(this.config);
+    console.log(this.config.src);
     this.svgList = fs.readdirSync(this.config.src).filter(junk.not);
     this.minifiedSvgList = [];
     this.build = this.build.bind(this);
@@ -20,7 +22,8 @@ class SvgGenerator {
   }
 
   minify(filename, callback) {
-    mkdir(this.config.minify.dest);
+    console.log(this.config.minify.dest);
+    mkdir.sync(this.config.minify.dest);
     if (path.extname(filename) === '.svg') {
       const srcSvg = fs.readFileSync(path.join(this.config.src, filename));
       this.svgo.customOptimize(srcSvg, filename, callback);
@@ -49,4 +52,4 @@ class SvgGenerator {
   }
 }
 
-module.exports = SvgGenerator;
+module.exports = Svgbg;

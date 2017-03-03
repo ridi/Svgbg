@@ -1,34 +1,35 @@
-const SvgGenerator = require('../svgbg');
+const Svgbg = require('../svgbg');
 
 const config = {
-  src: './src',
+  root: __dirname,
+  src: 'src',
   minify: {
-    dest: './dist',
+    dest: 'dist/svg',
   },
   templates: [
     {
-      name: 'svg_icon_full',
+      name: 'sample',
       type: 'less',
-      dest: ['./dist'],
-      template: './templates/sample.less.hbs',
+      dest: ['dist/less'],
+      template: 'templates/sample.less.hbs',
       etc: {
         a: 'b',
       },
     },
     {
-      name: 'page_svg_icon',
+      name: 'sample_page',
       type: 'less',
-      dest: ['./dist'],
-      template: './templates/sample_page.less.hbs',
+      dest: ['dist/less'],
+      template: 'templates/sample_page.less.hbs',
     },
     {
-      name: 'svg-icon',
+      name: 'sample_page',
       type: 'html',
-      dest: ['./dist'],
-      template: './templates/sample.html.hbs',
+      dest: ['dist'],
+      template: 'templates/sample.html.hbs',
     },
   ],
 };
 
-const svgGen = new SvgGenerator(config);
-svgGen.build();
+const svgbg = new Svgbg(config);
+svgbg.build();

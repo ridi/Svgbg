@@ -2,13 +2,19 @@
   "name": "svgbg",
   "version": "0.1.0",
   "description": "turn your svg files to css backgrounds",
-  "keywords": ["svg", "background", "css", "template"],
+  "keywords": [
+    "svg",
+    "background",
+    "css",
+    "template"
+  ],
   "license": "MIT",
   "main": "svgbg.js",
   "dependencies": {
     "async": "^2.1.4",
     "handlebars": "^4.0.6",
     "junk": "^2.0.0",
+    "less": "^2.7.2",
     "mkdirp": "^0.5.1",
     "object.map": "^0.2.0",
     "svgo": "^0.7.1"
@@ -21,6 +27,8 @@
     "node": ">=6.8.1"
   },
   "scripts": {
-    "lint": "eslint './**/*.js'"
+    "lint": "eslint '**/*.js'",
+    "sample": "rm -rf sample/dist && node 'sample/test.js' && npm run less",
+    "less": "lessc sample/dist/less/sample_page.less sample/dist/sample_page.css"
   }
 }
