@@ -11,8 +11,6 @@ class Svgbg {
   constructor(config) {
     this.config = Config(config);
     this.svgo = new CustomSVGO(config.minify.options);
-    console.log(this.config);
-    console.log(this.config.src);
     this.svgList = fs.readdirSync(this.config.src).filter(junk.not);
     this.minifiedSvgList = [];
     this.build = this.build.bind(this);
@@ -22,7 +20,6 @@ class Svgbg {
   }
 
   minify(filename, callback) {
-    console.log(this.config.minify.dest);
     mkdir.sync(this.config.minify.dest);
     if (path.extname(filename) === '.svg') {
       const srcSvg = fs.readFileSync(path.join(this.config.src, filename));
