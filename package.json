@@ -18,12 +18,12 @@
     "junk": "^2.0.0",
     "less": "^2.7.2",
     "mkdirp": "^0.5.1",
-    "object.map": "^0.2.0",
+    "object.map": "^1.0.0",
     "svgo": "^0.7.1"
   },
   "devDependencies": {
-    "eslint": "^3.16.1",
-    "eslint-config-ridibooks": "^1.1.0"
+    "eslint": "^4.4.0",
+    "eslint-config-ridibooks": "^2.0.0"
   },
   "engines": {
     "node": ">=6.8.1"
